@@ -1,10 +1,12 @@
-# fly.toml file generated for bloglist-app on 2023-01-06T15:14:27+02:00
+# fly.toml file generated for blog-sovellus on 2023-01-06T17:08:05+02:00
 
-app = "bloglist-app"
+app = "blog-sovellus"
 kill_signal = "SIGINT"
 kill_timeout = 5
+processes = []
 
 [env]
+  PORT = "8080"
 
 [experimental]
   allowed_public_ports = []
@@ -35,8 +37,9 @@ kill_timeout = 5
     interval = "15s"
     restart_limit = 0
     timeout = "2s"
+    
 [deploy]
   release_command = "npm run build"
 
 [processes]
-  app = "node app.js"
+  app = "node index.js"

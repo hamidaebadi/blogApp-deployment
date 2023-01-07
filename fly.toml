@@ -1,6 +1,6 @@
-# fly.toml file generated for blog-sovellus on 2023-01-06T17:08:05+02:00
+# fly.toml file generated for blogaapp-sovellus on 2023-01-06T21:28:21+02:00
 
-app = "blog-sovellus"
+app = "blogaapp-sovellus"
 kill_signal = "SIGINT"
 kill_timeout = 5
 processes = []
@@ -13,7 +13,6 @@ processes = []
   auto_rollback = true
 
 [[services]]
-  http_checks = []
   internal_port = 8080
   processes = ["app"]
   protocol = "tcp"
@@ -37,9 +36,19 @@ processes = []
     interval = "15s"
     restart_limit = 0
     timeout = "2s"
-    
+
 [deploy]
   release_command = "npm run build"
 
 [processes]
   app = "node index.js"
+
+[[services.http_checks]]
+  interval = 10000
+  grace_period = "5s"
+  method = "get"
+  path = "/health"
+  protocol = "http"
+  restart_limit = 0
+  timeout = 2000
+  tls_skip_verify = false

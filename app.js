@@ -12,8 +12,8 @@ const app = express()
 const mongoUrl = config.MONGODB_URL
 
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true })
-.then(() => logger.info('Connected to DB'))
-.catch(error => logger.error('error connection to Database'))
+  .then(() => logger.info('Connected to DB'))
+  .catch(error => logger.error('error connection to Database'+error))
 
 app.use(middleware.tokenExtractor)
 app.use(express.json())
@@ -21,9 +21,12 @@ app.use(express.static('dist'))
 app.use('/api/blogs', userExtractor, blogRouter)
 app.use('/api/users', userRouter)
 app.use('/api/login', loginRouter)
+app.get('/health', (req, res) => {
+  res.send('ok')
+})
 if(process.env.NODE_ENV === 'test'){
-    const testingRouter = require('./controllers/tests')
-    app.use('/api/testing', testingRouter)
+  const testingRouter = require('./controllers/tests')
+  app.use('/api/testing', testingRouter)
 }
 
 module.exports = app

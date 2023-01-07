@@ -1,3 +1,6 @@
+/**
+ * @jest-environment node
+ */
 const mongoose = require('mongoose')
 const jwt = require('jsonwebtoken')
 const supertest = require('supertest')

@@ -21,6 +21,9 @@ app.use(express.static('dist'))
 app.use('/api/blogs', userExtractor, blogRouter)
 app.use('/api/users', userRouter)
 app.use('/api/login', loginRouter)
+app.get('/health', (req, res) => {
+  res.send('ok')
+})
 if(process.env.NODE_ENV === 'test'){
   const testingRouter = require('./controllers/tests')
   app.use('/api/testing', testingRouter)

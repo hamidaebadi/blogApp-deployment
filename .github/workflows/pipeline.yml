@@ -37,10 +37,8 @@ jobs:
         run: npm run test:frontend
 
       - name: Deploy app
-        if: ${{ github.event_name == 'push' && contains(join(env.COMMIT_MESSAGES), '#skip') == 'false'}}
+        if: ${{ github.event_name == 'push'}}
         run: flyctl deploy --remote-only
-
-      
 
   tag_release:
     needs: [simple_deployment_pipeline]
@@ -50,7 +48,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Bump version and push tag
-        if: ${{ github.event_name == 'push' && contains(join(env.COMMIT_MESSAGES), '#skip') == 'false' }}
+        if: ${{ github.event_name == 'push'}}
         uses: anothrNick/github-tag-action@1.36.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

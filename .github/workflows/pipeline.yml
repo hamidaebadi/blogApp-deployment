@@ -1,0 +1,57 @@
+name: simple_pipeline_CI
+
+on:
+  push:
+    branches:
+      - master
+
+  pull_request:
+    branches: [master]
+    types: [opened, synchronize]
+
+env:
+  FLY_API_TOKEN: ${{ secrets.FLY_BLOG_TOKEN }}
+
+jobs:
+  simple_deployment_pipeline:
+    runs-on: ubuntu-20.04
+    env:
+        COMMIT_MESSAGES: ${{ toJson(github.event.commits.*.message) }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+      - uses: superfly/flyctl-actions/setup-flyctl@master
+        with:
+          node-version: '16'
+
+      - name: npm install
+        run: npm install
+
+      - name: lint
+        run: npm run eslint
+
+      - name: Build
+        run: npm run build
+
+      - name: test frontend
+        run: npm run test:frontend
+
+      - name: Deploy app
+        if: ${{ github.event_name == 'push' && contains(join(env.COMMIT_MESSAGES), '#skip') == 'false'}}
+        run: flyctl deploy --remote-only
+
+      
+
+  tag_release:
+    needs: [simple_deployment_pipeline]
+    runs-on: ubuntu-20.04
+    env:
+        COMMIT_MESSAGES: ${{ toJson(github.event.commits.*.message) }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: Bump version and push tag
+        if: ${{ github.event_name == 'push' && contains(join(env.COMMIT_MESSAGES), '#skip') == 'false' }}
+        uses: anothrNick/github-tag-action@1.36.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DEFAULT_BUMP: patch

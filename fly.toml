@@ -1,6 +1,6 @@
-# fly.toml file generated for blog-sovellus on 2023-01-06T17:08:05+02:00
+# fly.toml file generated for blogaapp-sovellus on 2023-01-06T21:28:21+02:00
 
-app = "blog-sovellus"
+app = "blogaapp-sovellus"
 kill_signal = "SIGINT"
 kill_timeout = 5
 processes = []
@@ -37,7 +37,7 @@ processes = []
     interval = "15s"
     restart_limit = 0
     timeout = "2s"
-    
+
 [deploy]
   release_command = "npm run build"
 

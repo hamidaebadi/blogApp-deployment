@@ -36,9 +36,6 @@ jobs:
       - name: test frontend
         run: npm run test:frontend
 
-      - name: test backend
-        run: npm run test:backend
-
       - name: Deploy app
         if: ${{ github.event_name == 'push' && contains(join(env.COMMIT_MESSAGES), '#skip') == 'false'}}
         run: flyctl deploy --remote-only

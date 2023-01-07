@@ -1,3 +1,6 @@
+/**
+ * @jest-environment node
+ */
 const mongoose = require('mongoose')
 const test_helper = require('./test_helper')
 const app = require('../app')

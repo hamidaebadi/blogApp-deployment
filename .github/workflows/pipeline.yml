@@ -33,8 +33,11 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: test
-        run: npm run test
+      - name: test frontend
+        run: npm run test:frontend
+
+      - name: test backend
+        run: npm run test:backend
 
       - name: Deploy app
         if: ${{ github.event_name == 'push' && contains(join(env.COMMIT_MESSAGES), '#skip') == 'false'}}
